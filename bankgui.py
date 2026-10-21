@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox as msgbox
 
 FONT_MAIN = ('Arial', 11)
 FONT_TITLE = ('Arial', 16, 'bold')
@@ -15,8 +14,9 @@ def signup():
 		return
 
 	if db.get(user) != None:
-		db[user][1] = pwd
-	db[user] = [user, 0]
+		db[user][0] = pwd
+	else:
+		db[user] = [pwd, 0]
 
 	print(db)
 
