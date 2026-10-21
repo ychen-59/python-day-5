@@ -37,19 +37,75 @@ def login():
 	show_dashboard(user)
 
 
+def login_screen():
+	for widget in root.winfo_children():
+		widget.destroy()
+
+	# Heading
+	l_login = tk.Label(root, text='LOGIN', font=FONT_TITLE)
+	l_login.pack(pady=20)
+
+	# Username
+	f_user = tk.Frame(root)
+	f_user.pack()
+	l_user = tk.Label(f_user, text='Username:', font=FONT_MAIN, width=10, anchor='w')
+	l_user.pack(side=tk.LEFT)
+	global e_user
+	e_user = tk.Entry(f_user, width=15)
+	e_user.pack(side=tk.LEFT)
+
+	# Password
+	f_pwd = tk.Frame(root)
+	f_pwd.pack()
+	l_pwd = tk.Label(f_pwd, text='Password:', font=FONT_MAIN, width=10, anchor='w')
+	l_pwd.pack(side=tk.LEFT)
+	global e_pwd
+	e_pwd = tk.Entry(f_pwd, width=15, show='*')
+	e_pwd.pack(side=tk.LEFT)
+
+	tk.StringVar = ''
+
+	# Login Button
+	f_btn = tk.Frame(root)
+	f_btn.pack(pady=15)
+	btn_login = tk.Button(root, text='Log In', font=FONT_MAIN, width=15, command=login)
+	btn_signup = tk.Button(
+		root, text='Sign Up', font=FONT_MAIN, width=15, command=signup
+	)
+	btn_login.pack()
+	btn_signup.pack()
+
+	# Message
+	global l_status
+	l_status = tk.Label(root, text='', font=('Arial', 10))
+	l_status.pack(pady=10)
+
+
 def update_balance(val):
 	l_balance.config(text=str(val))
 
 def deposit():
+	l_status.config(text='')
 	user = tk.StringVar
-	amount = int(e_deposit.get())
+	try:
+		amount = int(e_deposit.get())
+	except ValueError:
+		l_status.config(text='Invalid amount.', fg='#d9534f')
+		return
+
 	db[user][1] += amount
 	update_balance(db[user][1])
 
 
 def withdraw():
+	l_status.config(text='')
 	user = tk.StringVar
-	amount = int(e_withdraw.get())
+	try:
+		amount = int(e_withdraw.get())
+	except ValueError:
+		l_status.config(text='Invalid amount.', fg='#d9534f')
+		return
+
 	if amount > db[user][1]:
 		l_status.config(text='Not enough money.', fg='#d9534f')
 		return
@@ -94,47 +150,6 @@ def show_dashboard(user):
 
 	btn_exit = tk.Button(root, text='Exit', font=FONT_MAIN, width=16, command=login_screen)
 	btn_exit.pack()
-
-	# Message
-	global l_status
-	l_status = tk.Label(root, text='', font=('Arial', 10))
-	l_status.pack(pady=10)
-
-def login_screen():
-	for widget in root.winfo_children():
-		widget.destroy()
-
-	# Heading
-	l_login = tk.Label(root, text='LOGIN', font=FONT_TITLE)
-	l_login.pack(pady=20)
-
-	# Username
-	f_user = tk.Frame(root)
-	f_user.pack()
-	l_user = tk.Label(f_user, text='Username:', font=FONT_MAIN, width=10, anchor='w')
-	l_user.pack(side=tk.LEFT)
-	global e_user
-	e_user = tk.Entry(f_user, width=15)
-	e_user.pack(side=tk.LEFT)
-
-	# Password
-	f_pwd = tk.Frame(root)
-	f_pwd.pack()
-	l_pwd = tk.Label(f_pwd, text='Password:', font=FONT_MAIN, width=10, anchor='w')
-	l_pwd.pack(side=tk.LEFT)
-	global e_pwd
-	e_pwd = tk.Entry(f_pwd, width=15, show='*')
-	e_pwd.pack(side=tk.LEFT)
-
-	tk.StringVar = ''
-
-	# Login Button
-	f_btn = tk.Frame(root)
-	f_btn.pack(pady=15)
-	btn_login = tk.Button(root, text='Log In', font=FONT_MAIN, width=15, command=login)
-	btn_signup = tk.Button(root, text='Sign Up', font=FONT_MAIN, width=15, command=signup)
-	btn_login.pack()
-	btn_signup.pack()
 
 	# Message
 	global l_status
